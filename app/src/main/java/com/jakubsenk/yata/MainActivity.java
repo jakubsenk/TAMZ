@@ -2,30 +2,33 @@ package com.jakubsenk.yata;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
 {
     ListView todos;
 
-    TodoItem[] items = {
-            new TodoItem("Title 1 Which is verry verry long and when I say long I mean really long", R.drawable.high_priority),
-            new TodoItem("Title 2", R.drawable.medium_priority),
-            new TodoItem("Title 3", R.drawable.low_priority, new String[]{"Ein", "Zwai", "Drai"}),
-    };
+    List<TodoItem> items;
+    TodoListItemAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        items = TodoProvider.GetTodos(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TodoListItemAdapter adapter = new TodoListItemAdapter(this, items);
-        todos = (ListView) findViewById(R.id.list);
+        adapter = new TodoListItemAdapter(this, items);
+        todos = findViewById(R.id.list);
         todos.setAdapter(adapter);
 
 
@@ -38,5 +41,40 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(getApplicationContext(), "Click!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        // R.menu.mymenu is a reference to an xml file named mymenu.xml which should be inside your res/menu directory.
+        // If you don't have res/menu, just create a directory named "menu" inside res
+        getMenuInflater().inflate(R.menu.main_activity_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // handle button activities
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        int id = item.getItemId();
+
+        if (id == R.id.mybutton)
+        {
+            Intent i = new Intent(this, NewTodoActivity.class);
+            startActivityForResult(i, 1);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1)
+        {
+            items = TodoProvider.GetTodos(this);
+            adapter.clear();
+            adapter.addAll(items);
+        }
     }
 }

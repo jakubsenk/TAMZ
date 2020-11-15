@@ -1,30 +1,38 @@
 package com.jakubsenk.yata;
 
+import java.util.Date;
+
 public class TodoItem
 {
+    public int ID;
     public String Title;
-    public String[] Subtasks;
+    public String Description;
     public int PriorityId;
+    public Date Deadline;
+    public String[] Subtasks;
 
-    public TodoItem()
+    public TodoItem(int id)
     {
-        this(null, 0, null);
+        this(id, null, null, 0, null, null);
     }
 
-    public TodoItem(String title)
+    public TodoItem(int id, String title)
     {
-        this(title, 0, null);
+        this(id, title, null, 0, null, null);
     }
 
-    public TodoItem(String title, int priorityId)
+    public TodoItem(int id, String title, int priorityId)
     {
-        this(title, priorityId, null);
+        this(id, title, null, priorityId, null, null);
     }
 
-    public TodoItem(String title, int priorityId, String[] subtasks)
+    public TodoItem(int id, String title, String description, int priorityId, Date deadline, String[] subtasks)
     {
+        ID = id;
         Title = title;
-        Subtasks = subtasks;
+        Description = description;
         PriorityId = priorityId;
+        Deadline = deadline;
+        Subtasks = subtasks;
     }
 }
