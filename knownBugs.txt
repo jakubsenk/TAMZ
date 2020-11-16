@@ -1,0 +1,2 @@
+date picker nereaguje na první klik
+todo list je divně napozicován

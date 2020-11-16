@@ -87,8 +87,8 @@ public class NewTodoActivity extends AppCompatActivity
             }
             else if (dateSet)
             {
-                calendar.set(Calendar.HOUR_OF_DAY, 23);
-                calendar.set(Calendar.MINUTE, 59);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
                 deadline = calendar.getTime();
             }
             createNewTodo(new TodoItem(-1, title, description, priorityId, deadline, null));
