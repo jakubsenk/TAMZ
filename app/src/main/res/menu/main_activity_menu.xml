@@ -7,8 +7,4 @@
         app:showAsAction="always"
         android:icon="@drawable/add"
         />
-    <item
-        android:id="@+id/mybutton2"
-        android:title="Settings"
-        />
 </menu>

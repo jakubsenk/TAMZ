@@ -36,11 +36,13 @@ public class TodoListItemAdapter extends ArrayAdapter<TodoItem>
         View rowView = inflater.inflate(R.layout.todo_list_item, null, true);
 
         TextView titleText = (TextView) rowView.findViewById(R.id.title);
+        TextView descriptionText = (TextView) rowView.findViewById(R.id.listTodoDescription);
         TextView deadlineText = (TextView) rowView.findViewById(R.id.deadlineLabel);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
 
         final TodoItem item = items.get(position);
         titleText.setText(item.Title);
+        descriptionText.setText(item.Description);// != null ? item.Description : ""); // well done java, another bullshit... proste musim to checknout jak chuj, nemuzu tam dat proste null
         if (item.Deadline != null)
         {
             SimpleDateFormat format;
@@ -60,9 +62,9 @@ public class TodoListItemAdapter extends ArrayAdapter<TodoItem>
             {
                 deadlineText.setTextColor(Color.RED);
             }
-           else if (cal.get(Calendar.DAY_OF_MONTH) == calNow.get(Calendar.DAY_OF_MONTH) && cal.get(Calendar.MONTH) == calNow.get(Calendar.MONTH) && cal.get(Calendar.YEAR) == calNow.get(Calendar.YEAR))
+            else if (cal.get(Calendar.DAY_OF_MONTH) == calNow.get(Calendar.DAY_OF_MONTH) && cal.get(Calendar.MONTH) == calNow.get(Calendar.MONTH) && cal.get(Calendar.YEAR) == calNow.get(Calendar.YEAR))
             {
-                deadlineText.setTextColor(Color.rgb(255,120,0)); // No predefined orange? How low Java can even fall?
+                deadlineText.setTextColor(Color.rgb(255, 120, 0)); // No predefined orange? How low Java can even fall?
             }
         }
         else
@@ -77,7 +79,7 @@ public class TodoListItemAdapter extends ArrayAdapter<TodoItem>
                 TextView textView = new TextView(getContext());
                 textView.setText(item.Subtasks[i]);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                lp.setMargins((int) (10 * context.getResources().getDisplayMetrics().density), 0, 0, 0);
+                lp.setMargins((int) (13 * context.getResources().getDisplayMetrics().density), 0, 0, 0);
                 textView.setLayoutParams(lp); // Me je z te javy fakt na zvraceni
                 // textView.layout.marginLeft = 10 by asi bylo moc normalni, tak to radeji budem delat takhle retardovane
                 ((LinearLayout) rowView.findViewById(R.id.todoItemLayout)).addView(textView);

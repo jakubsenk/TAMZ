@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
@@ -18,15 +17,10 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 public class NewTodoActivity extends AppCompatActivity
 {
@@ -91,7 +85,8 @@ public class NewTodoActivity extends AppCompatActivity
                 calendar.set(Calendar.MINUTE, 0);
                 deadline = calendar.getTime();
             }
-            createNewTodo(new TodoItem(-1, title, description, priorityId, deadline, null));
+            String subtasks = ((EditText) findViewById(R.id.subtasks)).getText().toString();
+            createNewTodo(new TodoItem(-1, title, description, priorityId, deadline, subtasks.split("\n")));
         }
         return super.onOptionsItemSelected(item);
     }
