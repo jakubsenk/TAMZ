@@ -2,6 +2,8 @@ package com.jakubsenk.yata;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +51,7 @@ public class TodoListItemAdapter extends ArrayAdapter<TodoItem>
             Calendar cal = Calendar.getInstance();
             Calendar calNow = Calendar.getInstance();
             cal.setTime(item.Deadline);
-            if (cal.get(Calendar.HOUR_OF_DAY) == 0 && cal.get(Calendar.MINUTE) == 0)
+            if (cal.get(Calendar.HOUR_OF_DAY) == 23 && cal.get(Calendar.MINUTE) == 59)
             {
                 format = new SimpleDateFormat("yyyy-MM-dd");
             }
@@ -71,7 +73,21 @@ public class TodoListItemAdapter extends ArrayAdapter<TodoItem>
         {
             deadlineText.setText("");
         }
-        imageView.setImageResource(item.PriorityId);
+        switch (item.PriorityId)
+        {
+            case 0:
+                imageView.setImageResource(0);
+                break;
+            case 1:
+                imageView.setImageResource(R.drawable.low_priority);
+                break;
+            case 2:
+                imageView.setImageResource(R.drawable.medium_priority);
+                break;
+            case 3:
+                imageView.setImageResource(R.drawable.high_priority);
+                break;
+        }
         if (item.Subtasks != null)
         {
             for (int i = 0; i < item.Subtasks.length; i++)
@@ -82,9 +98,24 @@ public class TodoListItemAdapter extends ArrayAdapter<TodoItem>
                 lp.setMargins((int) (13 * context.getResources().getDisplayMetrics().density), 0, 0, 0);
                 textView.setLayoutParams(lp); // Me je z te javy fakt na zvraceni
                 // textView.layout.marginLeft = 10 by asi bylo moc normalni, tak to radeji budem delat takhle retardovane
+                if (item.SubtasksDone[i])
+                {
+                    textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                }
                 ((LinearLayout) rowView.findViewById(R.id.todoItemLayout)).addView(textView);
             }
         }
+
+        if (item.Done)
+        {
+            titleText.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            titleText.setTextColor(Color.GRAY);
+        }
+
+        float measureText = deadlineText.getPaint().measureText(deadlineText.getText().toString());
+        deadlineText.setMinWidth(deadlineText.getPaddingLeft() + deadlineText.getPaddingRight() + (int) measureText);
+        deadlineText.setMinimumWidth(deadlineText.getPaddingLeft() + deadlineText.getPaddingRight() + (int) measureText);
+        deadlineText.setWidth(deadlineText.getPaddingLeft() + deadlineText.getPaddingRight() + (int) measureText);
 
         return rowView;
     }

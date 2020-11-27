@@ -29,6 +29,8 @@ public class NewTodoActivity extends AppCompatActivity
     boolean timeSet = false;
     boolean dateSet = false;
 
+    TodoItem editItem = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -36,6 +38,13 @@ public class NewTodoActivity extends AppCompatActivity
         setContentView(R.layout.activity_new_todo);
         date_time_in = findViewById(R.id.todoDeadline);
         date_time_in.setInputType(InputType.TYPE_NULL);
+
+        int editID = getIntent().getIntExtra("id", -1);
+        if (editID != -1)
+        {
+            DBHelper db = new DBHelper(this);
+            editItem = db.getItem(editID);
+        }
     }
 
     @Override
@@ -64,15 +73,15 @@ public class NewTodoActivity extends AppCompatActivity
             int priorityId = 0;
             if (priority.getText().equals("High"))
             {
-                priorityId = R.drawable.high_priority;
+                priorityId = 3;
             }
             else if (priority.getText().equals("Normal"))
             {
-                priorityId = R.drawable.medium_priority;
+                priorityId = 2;
             }
             else if (priority.getText().equals("Low"))
             {
-                priorityId = R.drawable.low_priority;
+                priorityId = 1;
             }
             Date deadline = null;
             if (dateSet && timeSet)
@@ -81,12 +90,24 @@ public class NewTodoActivity extends AppCompatActivity
             }
             else if (dateSet)
             {
-                calendar.set(Calendar.HOUR_OF_DAY, 0);
-                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.HOUR_OF_DAY, 23);
+                calendar.set(Calendar.MINUTE, 59);
                 deadline = calendar.getTime();
             }
             String subtasks = ((EditText) findViewById(R.id.subtasks)).getText().toString();
-            createNewTodo(new TodoItem(-1, title, description, priorityId, deadline, subtasks.split("\n")));
+            String[] subtasksParsed = new String[]{};
+            if (!subtasks.equals(""))
+            {
+                subtasksParsed = subtasks.split("\n");
+            }
+
+            boolean[] dones = new boolean[subtasksParsed.length];
+            for (int i = 0; i < subtasksParsed.length; i++)
+            {
+                dones[i] = false;
+            }
+
+            createNewTodo(new TodoItem(-1, title, description, priorityId, deadline, subtasksParsed, dones, false));
         }
         return super.onOptionsItemSelected(item);
     }

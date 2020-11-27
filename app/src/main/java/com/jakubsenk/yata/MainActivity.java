@@ -37,8 +37,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                // TODO Auto-generated method stub
-                Toast.makeText(getApplicationContext(), "Click!", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getApplicationContext(), TaskDetail.class);
+                i.putExtra("id", items.get(position).ID);
+                startActivityForResult(i, 1);
             }
         });
     }
