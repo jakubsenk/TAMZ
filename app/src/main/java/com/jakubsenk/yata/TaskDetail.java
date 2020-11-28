@@ -2,6 +2,8 @@ package com.jakubsenk.yata;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -25,7 +27,6 @@ import java.util.concurrent.TimeUnit;
 public class TaskDetail extends AppCompatActivity
 {
 
-    final DBHelper db = new DBHelper(this);
     TodoItem item;
 
     @Override
@@ -41,7 +42,7 @@ public class TaskDetail extends AppCompatActivity
             finish();
             return;
         }
-        item = db.getItem(id);
+        item = TodoProvider.GetTodo(this, id);
         TextView title = findViewById(R.id.titleDetail);
         title.setText(item.Title);
         TextView description = findViewById(R.id.descriptionDetail);
@@ -122,11 +123,14 @@ public class TaskDetail extends AppCompatActivity
         ListView subtasksList = findViewById(R.id.subtasksDetail);
         subtasksList.setAdapter(adapter);
 
+        // Cant retreive list items so i can set striked text? (Without creating custom adapter)
+
         subtasksList.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
+                DBHelper db = new DBHelper(getApplicationContext());
                 TextView row = (TextView) view;
                 if (item.SubtasksDone[position])
                 {
@@ -157,7 +161,7 @@ public class TaskDetail extends AppCompatActivity
         {
             case R.id.checkButton:
                 this.item.Done = true;
-                db.updateItem(this.item);
+                TodoProvider.UpdateTodo(this, this.item);
                 finish();
                 break;
             case R.id.editButton:
@@ -166,7 +170,29 @@ public class TaskDetail extends AppCompatActivity
                 startActivityForResult(intent, 1);
                 finish();
                 break;
+            case R.id.deleteButton:
+                alertDialog("Delete todo", "Are you sure you want to delete this todo?");
+                break;
         }
         return true;
+    }
+
+    private void alertDialog(String title, String message)
+    {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setMessage(message);
+        dialog.setTitle(title);
+        dialog.setPositiveButton("YES", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                TodoProvider.DeleteTodo(getApplicationContext(), item.ID);
+                finish();
+            }
+        });
+        dialog.setNegativeButton("NO", null);
+        AlertDialog alertDialog = dialog.create();
+        alertDialog.show();
     }
 }

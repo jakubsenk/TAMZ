@@ -30,6 +30,7 @@ public class NewTodoActivity extends AppCompatActivity
     boolean dateSet = false;
 
     TodoItem editItem = null;
+    int editID = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -39,11 +40,49 @@ public class NewTodoActivity extends AppCompatActivity
         date_time_in = findViewById(R.id.todoDeadline);
         date_time_in.setInputType(InputType.TYPE_NULL);
 
-        int editID = getIntent().getIntExtra("id", -1);
+        editID = getIntent().getIntExtra("id", -1);
         if (editID != -1)
         {
             DBHelper db = new DBHelper(this);
             editItem = db.getItem(editID);
+
+            ((EditText) findViewById(R.id.todoTitle)).setText(editItem.Title);
+            ((EditText) findViewById(R.id.todoDescription)).setText(editItem.Description);
+            RadioGroup radios = findViewById(R.id.radioGroup);
+            switch (editItem.PriorityId)
+            {
+                case 0:
+                    radios.check(R.id.radioNone);
+                    break;
+                case 1:
+                    radios.check(R.id.radioLow);
+                    break;
+                case 2:
+                    radios.check(R.id.radioNormal);
+                    break;
+                case 3:
+                    radios.check(R.id.radioHigh);
+                    break;
+            }
+            if (editItem.Deadline != null)
+            {
+                calendar.setTime(editItem.Deadline);
+                SimpleDateFormat simpleDateFormat;
+                if (calendar.get(Calendar.HOUR_OF_DAY) == 23 && calendar.get(Calendar.MINUTE) == 59)
+                {
+                    dateSet = true;
+                    simpleDateFormat = new SimpleDateFormat("yy-MM-dd"); // Is java really that stupid that you cant retreive locale date format?
+                }
+                else
+                {
+                    dateSet = true;
+                    timeSet = true;
+                    simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm"); // Is java really that stupid that you cant retreive locale date format?
+                    ((Button) findViewById(R.id.setTimeButton)).setText("Edit time");
+                }
+                date_time_in.setText(simpleDateFormat.format(calendar.getTime()));
+            }
+            ((EditText) findViewById(R.id.subtasks)).setText(String.join("\n", editItem.Subtasks));
         }
     }
 
@@ -107,9 +146,25 @@ public class NewTodoActivity extends AppCompatActivity
                 dones[i] = false;
             }
 
-            createNewTodo(new TodoItem(-1, title, description, priorityId, deadline, subtasksParsed, dones, false));
+            TodoItem newTodo = new TodoItem(-1, title, description, priorityId, deadline, subtasksParsed, dones, false);
+            if (editItem == null)
+            {
+                createNewTodo(newTodo);
+            }
+            else
+            {
+                newTodo.ID = editID;
+                updateTodo(newTodo);
+            }
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateTodo(TodoItem todo)
+    {
+        TodoProvider.UpdateTodo(this, todo);
+        finish();
     }
 
     private void createNewTodo(TodoItem todo)
