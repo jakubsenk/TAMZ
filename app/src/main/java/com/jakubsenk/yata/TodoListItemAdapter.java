@@ -3,7 +3,6 @@ package com.jakubsenk.yata;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PaintFlagsDrawFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ public class TodoListItemAdapter extends ArrayAdapter<TodoItem>
     public TodoListItemAdapter(Activity context, List<TodoItem> items)
     {
         super(context, R.layout.todo_list_item, items);
-        // TODO Auto-generated constructor stub
 
         this.context = context;
         this.items = items;

@@ -13,21 +13,6 @@ public class TodoItem
     public boolean[] SubtasksDone;
     public boolean Done;
 
-    public TodoItem(int id)
-    {
-        this(id, null, null, 0, null, null, null, false);
-    }
-
-    public TodoItem(int id, String title)
-    {
-        this(id, title, null, 0, null, null, null, false);
-    }
-
-    public TodoItem(int id, String title, int priorityId)
-    {
-        this(id, title, null, priorityId, null, null, null, false);
-    }
-
     public TodoItem(int id, String title, String description, int priorityId, Date deadline, String[] subtasks, boolean[] dones, boolean done)
     {
         ID = id;
