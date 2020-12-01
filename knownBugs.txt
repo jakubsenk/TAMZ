@@ -1,6 +1,0 @@
-date picker nereaguje na první klik
-todo list je divně napozicován
-nefunguje minimální šířka pro deadline - když je moc dlouhý název, seznam je rozhozený
-při zobrazení detailu se dokončené tasky nezaškrtnou
-nefunguje formát datumu pro daný jazyk
-při žádné prioritě se neposune text v detailu na místo obrázku

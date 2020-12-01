@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -101,7 +102,10 @@ public class TaskDetail extends AppCompatActivity
         {
             case 0:
                 imageView.setImageResource(0);
-                imageView.setMaxWidth(0);
+                // imageView.setMaxWidth(0);
+                // You must be really shitting me...
+                LayoutParams params = new LayoutParams(16,LayoutParams.WRAP_CONTENT);
+                imageView.setLayoutParams(params);
                 priority.setText("No priority");
                 break;
             case 1:
