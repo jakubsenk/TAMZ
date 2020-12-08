@@ -7,6 +7,12 @@
 - Dokončení podúkolů a úkolu samotného.
 - Smazání úkolu.
 
+# Featury
+
+- Advanced GUI - List
+- Advanced GUI - Gestures
+- Database - SQLite
+
 # Known bugs
 
 - date picker nereaguje na první klik
