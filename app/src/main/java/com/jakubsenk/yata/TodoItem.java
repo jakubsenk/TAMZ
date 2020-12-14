@@ -1,8 +1,10 @@
 package com.jakubsenk.yata;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TodoItem
+
+public class TodoItem implements Serializable
 {
     public int ID;
     public String Title;

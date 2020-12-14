@@ -6,4 +6,10 @@
         android:icon="@drawable/check"
         android:title=""
         app:showAsAction="always" />
+    <item
+        android:id="@+id/exportButton"
+        android:title="Export" />
+    <item
+        android:id="@+id/importButton"
+        android:title="Import" />
 </menu>

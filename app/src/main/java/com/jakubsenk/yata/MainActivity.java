@@ -6,6 +6,8 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -65,6 +67,11 @@ public class MainActivity extends AppCompatActivity
                             if (x2 < x1)
                             {
                                 item.Done = !item.Done;
+                                if (item.Done)
+                                {
+                                    final MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.tada);
+                                    mp.start();
+                                }
                                 TodoProvider.UpdateTodo(getApplicationContext(), item);
                                 items = TodoProvider.GetTodos(getApplicationContext());
                                 adapter.clear();
@@ -86,6 +93,15 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
         });
+
+        Intent i = getIntent();
+        Uri uri = i.getData();
+        if (uri != null)
+        {
+            Intent importIn = new Intent(this, NewTodoActivity.class);
+            importIn.setData(uri);
+            startActivityForResult(importIn, 1);
+        }
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -164,6 +165,8 @@ public class TaskDetail extends AppCompatActivity
         {
             case R.id.checkButton:
                 this.item.Done = true;
+                final MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.tada);
+                mp.start();
                 TodoProvider.UpdateTodo(this, this.item);
                 finish();
                 break;
